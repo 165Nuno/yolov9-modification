@@ -104,6 +104,8 @@ def run(
         # Second-stage classifier (optional)
         # pred = utils.general.apply_classifier(pred, classifier_model, im, im0s)
 
+        with open("detected_classes_and_confidence.txt", "w") as result_file:
+            result_file.write("")  # Escrever um texto vazio para limpar o conteúdo
         # Process predictions
         for i, det in enumerate(pred):  # per image
             seen += 1
@@ -136,6 +138,11 @@ def run(
                         line = (cls, *xywh, conf) if save_conf else (cls, *xywh)  # label format
                         with open(f'{txt_path}.txt', 'a') as f:
                             f.write(('%g ' * len(line)).rstrip() % line + '\n')
+                    
+                    # Aqui você grava as classes e confidências no arquivo .txt
+                    with open("detected_classes_and_confidence.txt", "a") as result_file:
+                        class_name = names[int(cls)]  # Nome da classe
+                        result_file.write(f"Class: {class_name}, Confidence: {conf:.4f}\n")
 
                     if save_img or save_crop or view_img:  # Add bbox to image
                         c = int(cls)  # integer class
